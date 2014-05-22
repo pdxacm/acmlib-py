@@ -20,7 +20,7 @@ class AcmLib:
         :param id_or_username: str or int
         :rtype: :class: `Person`
         """
-        response = self.__requester.get("/people/{}".format(id_or_username))
+        response = self.__requester.get(["/people/", id_or_username])
         return self.__process_list_response(response, Person)
 
     def get_people(self):
@@ -71,7 +71,7 @@ class AcmLib:
             )
 
         response = self.__requester.put(
-                "/people/{}".format(id_or_username), data)
+                ["/people/", id_or_username], data)
 
         return self.__process_response(response, Person)
 
@@ -81,7 +81,7 @@ class AcmLib:
         :param: id_or_username: int or str
         """
 
-        response = self.__requester.delete("/people/{}".format(id_or_username))
+        response = self.__requester.delete(["/people/", id_or_username])
 
     def get_event(self, event_id):
         """
@@ -89,7 +89,7 @@ class AcmLib:
         :param code: int
         :rtype: :class: `Event`
         """
-        response = self.__requester.get("/events/{}".format(int(event_id)))
+        response = self.__requester.get(["/events/", event_id])
         
         return map(lambda entry: 
             Event.from_json(
@@ -153,8 +153,7 @@ class AcmLib:
             speaker = speaker,
             )
 
-        response = self.__requester.put(
-                "/events/{}".format(event_id), data)
+        response = self.__requester.put(["/events/", event_id], data)
 
         return self.__process_response(response, Event)
 
@@ -164,7 +163,7 @@ class AcmLib:
         :param code: int
         :rtype: :class: `Post`
         """
-        response = self.__requester.get("/posts/{}".format(int(post_id)))
+        response = self.__requester.get(["/posts/", post_id])
         return self.__process_list_response(response, Post)
         
     def get_posts(self):
@@ -211,8 +210,7 @@ class AcmLib:
             content = content,
             )
 
-        response = self.__requester.put(
-                "/posts/{}".format(post_id), data)
+        response = self.__requester.put(["/posts/", post_id], data)
 
         return self.__process_response(response, Post)
 
@@ -222,8 +220,7 @@ class AcmLib:
         :param code: int
         :rtype: :class: `Membership`
         """
-        response = self.__requester.get(
-                "/membership/{}".format(int(membership_id)))
+        response = self.__requester.get(["/membership/", membership_id])
         return self.__process_list_response(response, Membership)
         
     def get_memberships(self):
@@ -266,7 +263,7 @@ class AcmLib:
             end = end,
             )
         response = self.__requester.put(
-                "/memberships/{}".format(membership_id), data)
+                ["/memberships/", membership_id], data)
 
         return self.__process_response(response, Membership)
 
@@ -276,8 +273,7 @@ class AcmLib:
         :param: id_or_username: int
         """
 
-        response = self.__requester.delete(
-                "/memberships/{}".format(membership_id))
+        response = self.__requester.delete(["/memberships/", membership_id])
 
     def get_officership(self, officership_id):
         """
@@ -285,8 +281,7 @@ class AcmLib:
         :param code: int
         :rtype: :class: `Officership`
         """
-        response = self.__requester.get(
-                "/officerships/{}".format(int(officership_id)))
+        response = self.__requester.get(["/officerships/", officership_id])
         return self.__process_list_response(response, Officership)
         
     def get_officerships(self):
@@ -337,7 +332,7 @@ class AcmLib:
             )
 
         response = self.__requester.put(
-                "/officerships/{}".format(officership_id))
+                ["/officerships/", officership_id])
 
         return self.__process_response(response, Officership)
 
@@ -347,8 +342,7 @@ class AcmLib:
         :param: id_or_username: int
         """
 
-        response = self.__requester.delete(
-                "/officerships/{}".format(officership_id))
+        response = self.__requester.delete(["/officerships/", officership_id])
 
     def __process_list_response(self, response, model):
         return map(lambda entry: 
