@@ -21,7 +21,7 @@ class AcmLib:
         :rtype: :class: `Person`
         """
         response = self.__requester.get(["/people/", id_or_username])
-        return self.__process_list_response(response, Person)
+        return self.__process_response(response, Person)
 
     def get_people(self):
         """
@@ -174,7 +174,7 @@ class AcmLib:
         response = self.__requester.get("/posts/")
         return self.__process_list_response(response, Post)
 
-    def add_posts(self, title=None, description=None, content=None):
+    def add_post(self, title=None, description=None, content=None):
         """
         :calls: `POST /posts/`
         :param: title: str
@@ -221,7 +221,7 @@ class AcmLib:
         :rtype: :class: `Membership`
         """
         response = self.__requester.get(["/membership/", membership_id])
-        return self.__process_list_response(response, Membership)
+        return self.__process_response(response, Membership)
         
     def get_memberships(self):
         """
@@ -282,7 +282,7 @@ class AcmLib:
         :rtype: :class: `Officership`
         """
         response = self.__requester.get(["/officerships/", officership_id])
-        return self.__process_list_response(response, Officership)
+        return self.__process_response(response, Officership)
         
     def get_officerships(self):
         """
@@ -351,4 +351,5 @@ class AcmLib:
             response.json())
 
     def __process_response(self, response, model):
-        return model.from_json(self.__requester, response.headers, entry)
+        return model.from_json(self.__requester, response.headers,
+                response.json())
