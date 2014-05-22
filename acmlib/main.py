@@ -1,4 +1,4 @@
-from . import DEFAULT_BASE_URL, exceptions
+from . import DEFAULT_BASE_URL
 from .models import Event, Post, Person, Membership, Officership
 from .requester import Requester
 
@@ -31,13 +31,15 @@ class AcmLib:
         response = self.__requester.get("/people/")
         return self.__process_list_response(response, Person)
         
-    def add_person(self, username, password, name=None, email=None):
+    def add_person(self, username, password, name=None, email=None,
+            website=None):
         """
         :calls: `POST /person/`
         :param: username: str
         :param: password: str
         :param: name: str
         :param: email: str
+        :param: website: str
         :rtype: :class: [`Person`]
         """
         
@@ -46,6 +48,7 @@ class AcmLib:
             password = password,
             name = name,
             email = email,
+            website = website,
             )
 
         response = self.__requester.post("/people/", data)
@@ -53,7 +56,7 @@ class AcmLib:
         return self.__process_response(response, Person)
     
     def update_person(self, id_or_username, password=None, name=None, 
-            email=None):
+            email=None, website=None):
         """
         :calls: `PUT /person/`
         :param: id_or_username: int or str
@@ -68,6 +71,7 @@ class AcmLib:
             password = password,
             name = name,
             email = email,
+            website = website,
             )
 
         response = self.__requester.put(
@@ -239,7 +243,7 @@ class AcmLib:
         :param: end: datetime
         :rtype: :class: [`Membership`]
         """
-        
+
         data = dict(
             person_id = person_id,
             start = start,
@@ -352,4 +356,4 @@ class AcmLib:
 
     def __process_response(self, response, model):
         return model.from_json(self.__requester, response.headers,
-                response.json())
+                response.json()[0])

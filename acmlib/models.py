@@ -91,11 +91,11 @@ class Person(Model):
 
     def __init__(self, requestor):
         super(Person, self).__init__(requestor)
-        self._id = None
-        self._name = None
-        self._username = None
-        self._email = None
-        self._website = None
+        self.id = None
+        self.name = None
+        self.username = None
+        self.email = None
+        self.website = None
 
     @classmethod
     def from_json(cls, requestor, headers, json):

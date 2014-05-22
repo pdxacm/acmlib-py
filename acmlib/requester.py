@@ -26,8 +26,6 @@ class Requester(object):
         return  self.__check(requests.post(url, data=data,
                 auth=(self.username, self.password)))
 
-        return response
-
     def put(self, path, data):
 
         url = self.__create_url(path)
