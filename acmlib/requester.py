@@ -16,17 +16,15 @@ class Requester(object):
 
         url = self.__create_url(path)
 
-        response = requests.get(url,
-                auth=(self.username, self.password))
-
-        return response
+        return self.__check(requests.get(url,
+                auth=(self.username, self.password)))
 
     def post(self, path, data):
 
         url = self.__create_url(path)
 
-        response = requests.post(url, data=data,
-                auth=(self.username, self.password))
+        return  self.__check(requests.post(url, data=data,
+                auth=(self.username, self.password)))
 
         return response
 
@@ -34,19 +32,15 @@ class Requester(object):
 
         url = self.__create_url(path)
 
-        response = requests.put(url, data=data,
-                auth=(self.username, self.password))
-
-        return response
+        return self.__check(requests.put(url, data=data,
+                auth=(self.username, self.password)))
 
     def delete(self, path):
 
         url = self.__create_url(path)
 
-        response = requests.delete(url,
-                auth=(self.username, self.password))
-
-        return response
+        return self.__check(requests.delete(url,
+                auth=(self.username, self.password)))
 
     def __create_url(self, path):
         
@@ -55,3 +49,21 @@ class Requester(object):
 
         path = '/'.join(map(lambda x: str(x).rstrip('/'), path))
         return urljoin(self.base_url, path)
+
+    def __check(self, response):
+
+        json = response.json()
+
+        if 'exception' in json:
+
+            exception = {
+                    'TypeError':TypeError,
+                    'LookupError':LookupError,
+                    'ValidationError':TypeError,
+                    'ValueError':ValueError,
+                }[json['exception']]
+
+            raise exception(json['message'])
+
+        else:
+            return response
