@@ -1,4 +1,4 @@
-from . import DEFAULT_BASE_URL
+from . import DEFAULT_BASE_URL, format_date, format_datetime
 from .models import Event, Post, Person, Membership, Officership
 from .requester import Requester
 
@@ -67,7 +67,6 @@ class AcmLib:
         """
 
         data = dict(
-            username = username,
             password = password,
             name = name,
             email = email,
@@ -122,8 +121,8 @@ class AcmLib:
         """
         
         data = dict(
-            start = start,
-            end = end,
+            start = format_datetime(start),
+            end = format_datetime(end),
             title = title,
             description = description,
             location = location,
@@ -149,7 +148,7 @@ class AcmLib:
         """
 
         data = dict(
-            start = start,
+            start = format_datetime(start) if start else None,
             end = end,
             title = title,
             description = description,
@@ -195,9 +194,9 @@ class AcmLib:
 
         response = self.__requester.post("/posts/", data)
         
-        return self.__process_response(response, Event)
+        return self.__process_response(response, Post)
     
-    def update_event(self, post_id, title=None, description=None, 
+    def update_post(self, post_id, title=None, description=None, 
             content=None):
         """
         :calls: `PUT /posts/`
@@ -224,7 +223,7 @@ class AcmLib:
         :param code: int
         :rtype: :class: `Membership`
         """
-        response = self.__requester.get(["/membership/", membership_id])
+        response = self.__requester.get(["/memberships/", membership_id])
         return self.__process_response(response, Membership)
         
     def get_memberships(self):
@@ -232,10 +231,10 @@ class AcmLib:
         :calls: `GET /memberships/`
         :rtype: :class: [`Membership`]
         """
-        response = self.__requester.get("/membership/")
+        response = self.__requester.get("/memberships/")
         return self.__process_list_response(response, Membership)
 
-    def add_membership(self, person_id, start, end=None):
+    def add_membership(self, person_id, start_date, end_date=None):
         """
         :calls: `POST /membership/`
         :param: person_id: int
@@ -246,15 +245,15 @@ class AcmLib:
 
         data = dict(
             person_id = person_id,
-            start = start,
-            end = end,
+            start_date = format_date(start_date),
+            end_date = format_date(end_date) if end_date else None,
             )
 
         response = self.__requester.post("/memberships/", data)
         
         return self.__process_response(response, Membership)
     
-    def update_membership(self, membership_id, start=None, end=None):
+    def update_membership(self, membership_id, start_date=None, end_date=None):
         """
         :calls: `PUT /membership/`
         :param: id_or_username: int
@@ -262,9 +261,8 @@ class AcmLib:
         """
 
         data = dict(
-            person_id = person_id,
-            start = start,
-            end = end,
+            start_date = format_date(start_date) if start_date else None,
+            end_date = format_date(end_date) if end_date else None,
             )
         response = self.__requester.put(
                 ["/memberships/", membership_id], data)
@@ -296,7 +294,7 @@ class AcmLib:
         response = self.__requester.get("/officerships/")
         return self.__process_list_response(response, Officership)
 
-    def add_officership(self, person_id, title, start, end=None):
+    def add_officership(self, person_id, title, start_date, end_date=None):
         """
         :calls: `POST /officership/`
         :param: person_id: int
@@ -309,16 +307,16 @@ class AcmLib:
         data = dict(
             person_id = person_id,
             title = title,
-            start = start,
-            end = end,
+            start_date = start_date,
+            end_date = end_date,
             )
 
         response = self.__requester.post("/officerships/", data)
         
         return self.__process_response(response, Officership)
      
-    def update_officership(self, officership_id, title=None, start=None,
-            end=None):
+    def update_officership(self, officership_id, title=None, start_date=None,
+            end_date=None):
         """
         :calls: `PUT /officership/`
         :param: officership_id: int
@@ -329,14 +327,13 @@ class AcmLib:
         """
 
         data = dict(
-            person_id = person_id,
             title = title,
-            start = start,
-            end = end,
+            start_date = start_date,
+            end_date = end_date,
             )
 
         response = self.__requester.put(
-                ["/officerships/", officership_id])
+                ["/officerships/", officership_id], data)
 
         return self.__process_response(response, Officership)
 
@@ -356,4 +353,4 @@ class AcmLib:
 
     def __process_response(self, response, model):
         return model.from_json(self.__requester, response.headers,
-                response.json()[0])
+                response.json())

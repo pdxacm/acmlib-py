@@ -44,12 +44,13 @@ class Requester(object):
         
         if type(path) not in (list, tuple):
             path = [path]
-
-        path = '/'.join(map(lambda x: str(x).rstrip('/'), path))
+        
+        path = reduce(lambda l, r: str(l).rstrip('/') + '/' + 
+                str(r).lstrip('/'), path)
         return urljoin(self.base_url, path)
 
     def __check(self, response):
-
+        
         json = response.json()
 
         if 'exception' in json:

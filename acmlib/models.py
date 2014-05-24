@@ -134,7 +134,7 @@ class Membership(Model):
         i.start_date = Model._makeDateAttribute(json['start_date'])
         i.end_date = json['end_date']
         if i.end_date:
-            i.end_date = Model._makeDatetimeAttribute(i.end_date)
+            i.end_date = Model._makeDateAttribute(i.end_date)
 
         return i
 
@@ -159,9 +159,9 @@ class Officership(Model):
         i.id = json['id']
         i.title = json['title']
         i.person_id = json['person_id']
-        i.start_date = json['start_date']
+        i.start_date = Model._makeDateAttribute(json['start_date'])
         i.end_date = json['end_date']
         if i.end_date:
-            i.end_date = Model._makeDatetimeAttribute(i.end_date)
+            i.end_date = Model._makeDateAttribute(i.end_date)
 
         return i
