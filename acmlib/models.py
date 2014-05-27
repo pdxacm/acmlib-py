@@ -165,3 +165,29 @@ class Officership(Model):
             i.end_date = Model._makeDateAttribute(i.end_date)
 
         return i
+
+class Database(Model):
+
+    def __init__(self, requestor):
+        super(Database, self).__init__(requestor)
+        self.dilect = None
+        self.host = None
+        self.port = None
+        self.database = None
+        self.username = None
+        self.pasword = None
+
+    @classmethod
+    def from_json(cls, requestor, headers, json):
+
+        i = cls(requestor)
+
+        i.headers = headers
+        i.dilect = json['dilect']
+        i.host = json['host']
+        i.port = json['port']
+        i.database = json['database']
+        i.username = json['username']
+        i.password = json['password']
+
+        return i

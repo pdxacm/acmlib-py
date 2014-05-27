@@ -1,5 +1,5 @@
 from . import DEFAULT_BASE_URL, format_date, format_datetime
-from .models import Event, Post, Person, Membership, Officership
+from .models import Event, Post, Person, Membership, Officership, Database
 from .requester import Requester
 
 class AcmLib:
@@ -344,6 +344,14 @@ class AcmLib:
         """
 
         response = self.__requester.delete(["/officerships/", officership_id])
+
+    def get_database(self):
+        """
+        :calls: `GET /database/`
+        :rtype: :class: `Database`
+        """
+        response = self.__requester.get("/database/")
+        return self.__process_response(response, Database)
 
     def __process_list_response(self, response, model):
         return map(lambda entry: 
